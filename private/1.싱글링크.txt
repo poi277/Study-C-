@@ -1,0 +1,162 @@
+#include <iostream>
+
+using namespace std;
+
+typedef struct node
+{
+	int a;
+	node* pnext;
+}node, * pnode;
+
+typedef struct LIST
+{
+	pnode pbegin;
+	pnode pend;
+}list, * plist;
+
+void reset(plist plist)
+{
+	plist->pbegin = NULL;
+	plist->pend = NULL;
+}
+
+void sum(plist plist)
+{
+	cout << "숫자를 입력하십시오" << endl;
+	pnode node1 = new node;
+
+	node1->pnext = NULL;
+
+	cin >> node1->a;
+
+
+
+	if (plist->pbegin == NULL)
+		plist->pbegin = node1;
+
+	else
+		plist->pend->pnext = node1;
+
+	plist->pend = node1;
+
+	cout << "숫자 입력 완료" << endl;
+
+	system("pause");
+
+}
+
+void print(plist plist)
+{
+	pnode node1 = plist->pbegin;
+	cout << "입력한 숫자를 모두 출력합니다" << endl;
+
+	while (node1 != NULL)
+	{
+		cout << node1->a << endl;
+
+		node1 = node1->pnext;
+	}
+	system("pause");
+}
+
+void Delete(plist plist)
+{
+	cout << "삭제할 숫자 입력" << endl;
+	int dela;
+	cin >> dela;
+
+	//순차적으로 돌 노드를 준다
+	pnode node1 = plist->pbegin;
+
+	//이전 노드를 우선 NULL값으로 준다
+	pnode prev = NULL;
+
+	while (node1 != NULL)
+	{
+		if (node1->a == dela)
+		{
+			pnode pnext = node1->pnext;
+			if (prev == NULL)
+			{
+				delete node1;
+				plist->pbegin = pnext;
+				if (pnext == NULL)
+				{
+					plist->pend = NULL;
+				}
+			}
+			else
+			{
+				delete node1;
+				prev->pnext = pnext;
+				if (pnext == NULL)
+					plist->pend = prev;
+
+			}
+			cout << "숫자 삭제 완료" << endl;
+			system("pause");
+			return;
+		}
+		//순차적으로 돌고 node1이 입력한 숫자가 아닐떄
+		prev = node1;
+		node1 = node1->pnext;
+	}
+	cout << "삭제할 학생이 없음" << endl;
+	system("pause");
+}
+
+void search(plist plist)
+{
+	pnode node1=plist->pbegin;
+	cout << "탐색할 숫자 입력" << endl;
+	int a;
+	cin >> a;
+	while (node1 != NULL)
+	{
+		if (node1->a == a)
+		{
+			cout << "입력하신" << node1->a <<"을 찾았습니다!" << endl;
+			system("pause");
+			return;
+		}
+		node1 = node1->pnext;
+
+	}
+	cout << "학생이없음.";
+		system("pause");
+}
+
+int main()
+{
+	list list;
+	reset(&list);
+	while (true)
+	{
+		cout << "1번:입력 2번:출력 3번 삭제 4번 탐색" << endl;
+		int i;
+		cin >> i;
+
+		switch (i)
+		{
+		case 1:
+			sum(&list);
+			break;
+
+		case 2:
+			print(&list);
+			break;
+
+		case 3:
+			Delete(&list);
+			break;
+		case 4:
+			search(&list);
+			break;
+
+		}
+	}
+
+
+
+	return 0;
+}

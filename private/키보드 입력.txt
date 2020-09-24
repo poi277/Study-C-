@@ -1,0 +1,39 @@
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+#define LEFT 75
+#define RIGHT 77
+#define UP 72
+#define DOWN 80
+// 1. 매크로로 좌우상하를 설정한다.
+int main(void) {
+    char c;
+    while (1) {
+        if (_kbhit()) {               // 2. while문안에서 키보드 눌렸을 시 if문이 실행된다.
+            c = _getch();           // 3. 방향키가 입력됬을 때 224 00 이 버퍼에 있다. 224부터 빼준다. 
+            if (c == -32) {           // 4. -32로 입력되면
+                c = _getch();        // 5. 뒤의 값 00을 판별하여 좌우상하 출력
+                switch (c) {
+                case LEFT:
+                   cout<<"좌로 이동\n";
+                    break;
+                case RIGHT:
+                    cout<<"우로 이동\n";
+                    break;
+                case UP:
+                    cout<<"위로 이동\n";
+                    break;
+                case DOWN:
+                    cout<<"아래로 이동\n";
+                    break;
+                }
+            }
+        }
+        cout << "입력대기"<<endl;
+    }
+    return 0;
+}
+
+//https://m.blog.naver.com/demonic3540/221206347973
+//http://blog.naver.com/PostView.nhn?blogId=tipsware&logNo=221242072724

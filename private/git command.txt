@@ -1,0 +1,37 @@
+()빼고 쳐야함
+
+
+동기화:
+git config --global user.name (유저이름)
+git config --global user.email (유저이메일)
+깃 저장소로 만들기:git init 
+
+깃의 버전: git --version
+깃의 로그:git log 그만보고싶을땐 q
+
+
+깃에 있는 한개의 리포지터리 복사및 연결: git clone (깃의 주소)
+
+파일 추가:
+깃목록에다가 파일추가:git add (파일이름.종류)
+깃목록에다가 모든파일 추가:git add .
+깃허브 홈페이지와 같게함(?):git pull
+
+코밋:
+깃에다가 코밋추가:git commit -m "코밋"
+파일코밋 수정:git commit --amend
+a 끝나면 esc 및 wq!
+예전의 커밋위치으로 가는법 git reset --hard (깃의 로그)
+
+깃목록을 홈페이지에 동기화:git push
+강제로 동기화:git push -f
+
+깃목록에 올라간 파일 제거:git reset (파일이름)
+
+깃목록 동기화:git status
+
+
+파일추가:git add->git commit->git push
+파일을 수정한후->git add->git status->git push
+파일 수정내역 무시:git checkout -- (파일이름)
+

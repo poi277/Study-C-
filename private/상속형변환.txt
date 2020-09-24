@@ -1,0 +1,35 @@
+#include <iostream>
+
+using namespace std;
+
+class alpha
+{
+public:
+
+	int a = 10;
+
+};
+
+class beta :public alpha
+{
+public:
+
+	void print()
+	{
+		cout << "beta";
+
+		cout << b;
+	}
+
+	float b=3.14;
+};
+
+
+int main()
+{
+	alpha* a = new beta;
+
+	beta* b = (beta*)a;
+
+	b->print();
+}

@@ -1,0 +1,150 @@
+#include <iostream>
+using namespace std;
+
+class coffee
+{
+public:
+
+	coffee()
+	{
+		this->price_value = 0;
+		w_time = 0;
+	}
+
+	void cappuccino()
+	{
+		price_value += 3800;
+		w_time += 3;
+	}
+
+	void americano()
+	{
+		price_value += 2500;
+		w_time += 1;
+	}
+
+	void output()
+	{
+		cout << this->price_value << "원" << endl;
+		cout << this->w_time << "분 걸릴겁니다." << endl;
+	}
+
+public:
+	coffee operator+(const coffee _a)
+	{
+		coffee cofe;
+		cofe.price_value = price_value + _a.price_value;
+		cofe.w_time = w_time + _a.w_time;
+
+		return cofe;
+	}
+	/*
+	void operator<< (const coffee _a)
+	{
+		price_value = _a.price_value;
+		w_time = _a.w_time;
+	}
+	*/
+
+	friend ostream& operator<<(ostream& c, const coffee& coffee)
+	{
+
+		cout << coffee.price_value;
+		cout << coffee.w_time;
+
+		return c;
+
+	}
+
+	//객체를 연산 할순 없다. 그래서 operator를 통해 재정의 해줘야한다.
+	//이 경우 operator << 연산자 함수를 cout의 소속 클래스인 ostream의 멤버 함수로 추가하거나 아니면 전역 함수로 만들어야 하는데 멤버로 정의하는 것은 불가능하다. 
+	//왜냐하면 ostream은 C++ 표준 라이브러리에 이미 컴파일되어 있어 int나 double같은 기본형 클래스와 거의 같은 수준의 타입이기 때문이다. 
+	//표준 라이브러리 함수를 뜯어 고칠 수는 없고 그래서 이 경우는 반드시 "프렌드 전역 연산자 함수"로 정의해야 한다.
+	//출력을 담당하는 ostream을 리턴하며 그 뒤에는 출력을 할 객체가 담긴다.
+	//추가로 현재 참조로 받았지만 포인터로 받을수도있음.
+
+
+private:
+
+	int price_value;
+	int w_time;
+};
+
+class side_menu
+{
+public:
+
+	side_menu()
+	{
+		price_value = 0;
+		w_time = 0;
+	}
+
+	void macaron()
+	{
+		price_value = 2500;
+		w_time = 5;
+	}
+	void cake()
+	{
+		price_value = 3000;
+		w_time = 5;
+	}
+
+private:
+
+	int price_value;
+	int w_time;
+};
+
+void menu()
+{
+	cout << "1.americano" << endl;
+	cout << "2.cappuccin" << endl;
+}
+
+int main()
+{
+	int size = 0;
+	cout << "손님이 몇분이신가요?" << endl;
+	cin >> size;
+
+
+	coffee* a = new coffee[size];
+
+	cout << " 주문 도와드리겠습니다 3번은 주문 끝입니다" << endl;
+	menu();
+	for (int i = 0; i < size; i++)
+	{
+		cout << i + 1 << "째분 주문 도와드리겠습니다" << endl;
+		int num = 0;
+		while (num != 3)
+		{
+			cin >> num;
+			if (num == 1)
+			{
+				a[i].americano();
+				cout << "아메리카노 하나 주문하셨습니다." << endl;
+			}
+			else if (num == 2)
+			{
+				a[i].cappuccino();
+				cout << "카푸치노 하나 주문하셨습니다" << endl;
+			}
+		};
+	}
+
+
+	coffee sum;
+	for (int i = 0; i < size; i++)
+	{
+		sum = sum + a[i];
+	}
+	cout << "총 합해서"; sum.output();
+
+	delete[] a;
+
+}
+
+
+

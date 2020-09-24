@@ -1,0 +1,32 @@
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	char chr[10];
+	char chr2[10];
+
+	cin.get(chr, 10);
+	cout << chr<<endl;
+
+	cin.clear();
+	cin.ignore(1024, '\n');
+
+	cin.getline(chr2, 9); //getline(변수,인덱스);
+	cout << chr2 << endl;
+
+	string a;
+	
+	getline(cin,a); //getline(파일입력,변수);
+
+//char면 함수 첫번째엔 변수명 두번째엔 인덱스,
+//string이면 함수 첫번째엔 cin 두번째엔 변수명
+
+	/*
+	char chr;
+	chr = cin.get();
+	cout << chr;
+	*/
+}

@@ -1,0 +1,40 @@
+#include <iostream>
+
+using namespace std;
+
+class alpha
+{
+public:
+
+	int alpha;
+};
+
+class beta
+{
+public:
+
+	typedef alpha talpha;
+	int beta;
+
+	talpha talphas;
+
+};
+
+int main()
+{
+	beta a;
+	a.talphas.alpha = 10; //or beta::talpha
+
+	cout << a.talphas.alpha<<endl;
+
+	beta *pa = new beta;
+
+	pa->talphas.alpha = 10;
+
+	cout << pa->talphas.alpha;
+
+	delete pa;
+
+
+}
+

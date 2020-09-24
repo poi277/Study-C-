@@ -1,0 +1,172 @@
+
+#include <iostream>
+using namespace std;
+
+class A
+{
+public:
+	virtual void Print() = 0;
+	//{
+	//	cout << "A 클래스의 Print() 함수" << endl;
+	//	cout << a;
+
+	//}
+
+	int a=10;
+};
+
+class B : public A
+{
+public:
+	virtual void Print()
+	{ 
+		cout << "B 클래스의 Print() 함수" << endl; 
+		a = 30;
+		cout << this->a;
+		
+	}
+};
+
+class C :public A
+{
+public:
+	virtual void Print()
+	{
+		cout << "C클래스의 print 함수";
+	}
+};
+
+
+
+//A타입의 객체를 생성하고 그 안에 print에는 a클래스 프린트 함수가 있다.
+//A타입의 포인터 a는 B를 동적할당 한다. 근데 B안에는 A가 상속되어있어서 A의 프린트를 출력할지 B의 프린트를 출력할지 모르기 때문에 부모(리턴타입)에 맞는 객체에 프린트한다.  (정적바인딩)
+//주소를 가리키는 A는 A만큼의 공간만 있기에 B에서 선언되는걸 호출할수없다.
+//추상클래스: 부모(도형)에는 자식(세모)과 자식1(네모)에 들어가는 공동된 함수(길이)를 넣고 부모(도형)는 길이가 없으니  추상클래스로 선언  
+
+int main(void)
+{
+	//A* a = new B;
+	//B* b = (B*)a;
+	//a->Print()
+
+	A* b = new B;
+
+	b->Print();
+	A* c = new C;
+
+	c->Print();
+
+	delete b;
+	delete c;
+}
+
+/*
+#include <iostream>
+using namespace std;
+
+class parent
+{
+public:
+	parent()
+	{
+		cout << "parent 생성자" << endl;
+	}
+	virtual ~parent()
+	{
+		cout << "parent 소멸자" << endl;
+	}
+
+	void output()
+	{
+		cout << a << endl;
+		cout << b << endl;
+		cout << c << endl;
+	}
+
+public:
+	int a;
+protected:
+	int b;
+private:
+	int c;
+};
+
+class child :public parent
+{
+public:
+	child()
+	{
+		b = 20;
+		// c = 30; 상속이라도 private이라 안됨
+		cout << "child 생성자" << endl;
+	}
+
+	 ~child()
+	{
+		cout << "child 소멸자" << endl;
+	}
+protected:
+	int d;
+};
+
+class child1 :private parent
+{
+public:
+	child1()
+	{
+		cout << "child1 생성자" << endl;
+	}
+	~child1()
+	{
+		cout << "child1 소멸자" << endl;
+	}
+private:
+	int d;
+};
+
+class childchild :public child
+{
+public:
+	childchild()
+	{
+		d = 500;
+		cout << "childchild 생성자" << endl;
+	}
+
+	~childchild()
+	{
+		cout << "childchild 소멸자" << endl;
+	}
+private:
+	int e;
+};
+
+int main()
+{
+	//다형성:상속관계에 있는 클래스 간에 형변환이 가능한 성질
+
+	//child 클래스는 parent의 클래스를 상속받고있음.
+	//new child를 하면 child객체 하나를 생성해주고 메모리 주소를 반환함.
+	//근데 parent*타입변수에 이 반환된 주소를 대입해주고있다.
+	//부모 포인터 타입에 자식(child)메모리 주소를 넣을수 있는 이유는 상속관계에 있기 때문이다.
+	//자식 메모리 주소를 부모포인터 타입으로 형변환 된것이다. (업캐스팅)
+	parent* pchild = new child;
+	delete pchild; // delete를 하게되면 parent의 포인터기때문에 parent의 소멸자만 호출된다.
+
+	//가상 함수::함수를 재정의 해주는 기능이다. parent 클래스에 virual키워드가 있으면 자식클래스에서 재정의 할수있다. 재정의는 함수 인자와 이름이 똑같아야한다.
+	//가상함수를 가지고있는 클래스는 내부적으로 가상함수 테이블이란게 생성된다.(가상함수들의 메모리 주소를 저장하는 테이블)
+	//parent가 가상함수고 child에서 재정의 해주고 child객체를 생성하면 가상함수 테이블에서는 child클래스의 주소가 올라가게된다
+	//만약 parent객체를 생성한다면 parent의 주소가 올라가게된다.
+	//그래서 가상함수를 호출하게되면 먼저 가상함수 테이블을 참조해서 메모리 주소를 확인하고 가상함수 테이블에 알맞는 주소가 들어가있는걸 호출해주는 개념.
+
+
+
+	//parent* parent1 = new child1; private이라 안됨.
+
+	//parent* parent2 = new childchild;
+
+	//parent* parentarr[2] = {};
+	//parentarr[0] = new child;
+	//parentarr[1] = new childchild;
+}
+*/

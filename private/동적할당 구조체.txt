@@ -1,0 +1,57 @@
+#include <iostream>
+using namespace std;
+
+typedef struct node
+{
+	int a;
+	node* pnext;
+}node,*pnode;
+
+typedef struct nodes
+{
+	node* node1;
+	node* node2;
+};
+
+void asd(nodes *nodes)
+{
+	nodes->node1->a = 10;
+	nodes->node2->a = 20;
+}
+
+void reset(nodes* nodes)
+{
+	nodes->node1 = NULL;
+	nodes->node2 = NULL;
+}
+
+void cot(nodes* nodes)
+{
+	cout << nodes->node1->a << endl;
+	cout << nodes->node2->a<<endl;
+}
+
+void spawn(nodes* nodes)
+{
+	nodes->node1 = new node;
+	nodes->node2 = new node;
+}
+
+
+int main()
+{
+	nodes *nodes = new struct nodes;
+
+	reset(nodes);
+	spawn(nodes);
+
+	asd(nodes);
+
+	cot(nodes);
+
+
+	cout << nodes<<endl; //노드들의 집합 주소를 입력한다.
+	cout << nodes->node1<<endl; //노드1의 주소를 출력한다.
+	cout << nodes->node2; //노드2의 주소 출력
+
+}
