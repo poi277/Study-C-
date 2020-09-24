@@ -1,0 +1,224 @@
+
+#include <iostream>
+#include "linkedlist.h"
+
+using namespace std;
+
+
+template <typename T>
+
+class listnode
+{
+
+private:
+	listnode() :m_pNext(NULL), m_pPrev(NULL)
+	{
+
+	}
+
+	~listnode()
+	{
+
+	}
+
+	template<typename T>
+	friend class Linkedlist;
+
+	template<typename T>
+	friend class listiterator;
+
+	T m_data;
+	listnode<T>* m_pNext;
+	listnode<T>* m_pPrev;
+
+};
+
+template <typename T>
+
+class listiterator
+{
+public:
+	listiterator()
+	{
+
+	}
+	~listiterator()
+	{
+
+	}
+
+private:
+	template<typename T>
+	friend class Linkedlist;
+private:
+	typedef listnode<T> node;
+	typedef listnode<T>* Pnode;
+	Pnode m_pnode;
+
+public:
+
+	bool operator==(const listiterator<T>& iter)
+	{
+		return m_pnode == iter.m_pnode;
+	}
+
+	bool operator!=(const listiterator<T>& iter)
+	{
+		return m_pnode != iter.m_pnode;
+	}
+
+	void operator++()
+	{
+		m_pnode = m_pnode->m_pNext;
+	}
+	void operator--()
+	{
+		m_pnode = m_pnode->m_pPrev;
+	}
+	T operator*()
+	{
+		return m_pnode->m_data;
+	}
+};
+
+template <typename T>
+
+class Linkedlist
+{
+public:
+
+	Linkedlist()
+	{
+		m_pBegin = new node;
+		m_pEnd = new node;
+
+
+
+		m_pBegin->m_pNext = m_pEnd;
+		m_pEnd->m_pPrev = m_pBegin;
+
+		m_isize = 0;
+	}
+
+	~Linkedlist()
+	{
+		clear();
+		delete m_pBegin;
+		delete m_pEnd;
+		m_isize = 0;
+	}
+
+private:
+	typedef listnode<T> node; //이름을 node로 정의
+	typedef listnode<T>* Pnode;
+
+
+
+public:
+	typedef listiterator<T> iterator;
+
+	Pnode m_pBegin;
+	Pnode m_pEnd;
+	unsigned m_isize;
+
+public:
+	void pushback(const T& data)
+	{
+		Pnode pnode = new node;
+
+		pnode->m_data = data;
+
+		Pnode pPrev = m_pEnd->m_pPrev;
+
+		pPrev->m_pNext = pnode;
+		pnode->m_pPrev = pPrev;
+
+		pnode->m_pNext = m_pEnd;
+		m_pEnd->m_pPrev = pnode;
+
+		++m_isize;
+
+
+
+	}
+
+	void pushfront(const T& data)
+	{
+		Pnode pnode = new node;
+		pnode->m_data = data;
+
+		Pnode pfirst = m_pBegin->m_pNext;
+
+		pfirst->m_pPrev = pnode;
+		pnode->m_pNext = pfirst;
+
+		pnode->m_pPrev = m_pBegin;
+		m_pBegin->m_pNext = pnode;
+
+		++m_isize;
+	}
+	unsigned int size() const
+	{
+		return m_isize;
+	}
+
+	bool empty() const
+	{
+		return m_isize == 0;
+	}
+
+	void clear()
+	{
+		Pnode pnode = m_pBegin->m_pNext;
+
+		while (pnode != m_pEnd)
+		{
+			Pnode pNext = pnode->m_pNext;
+			delete pnode;
+			pnode = pNext;
+		}
+
+		m_pBegin->m_pNext = m_pEnd;
+		m_pEnd->m_pPrev = m_pBegin;
+		m_isize = 0;
+
+	}
+	iterator begin()
+	{
+		iterator iter;
+		iter.m_pnode = m_pBegin->m_pNext;
+		return iter;
+	}
+	iterator end()
+	{
+		iterator iter;
+		iter.m_pnode = m_pEnd;
+
+		return iter;
+	}
+
+};
+
+
+int main()
+{
+	Linkedlist<int> listint;
+	Linkedlist<float> listfloat;
+
+	for (int i = 0; i < 100; i++)
+	{
+		listint.pushback(i + 1);
+	}
+
+	cout << listint.size() << endl;
+
+	Linkedlist<int>::iterator iter;
+
+	for (iter = listint.begin(); iter != listint.end(); ++iter)
+	{
+		cout << *iter << endl;;
+	}
+
+	return 0;
+}
+

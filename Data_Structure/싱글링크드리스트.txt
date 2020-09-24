@@ -1,0 +1,297 @@
+#include <iostream>
+
+using namespace std;
+
+enum main
+{
+	m_node,
+	m_insert,
+	m_delete,
+	m_search,
+	m_output,
+	m_exit
+};
+
+#define name_size 32
+
+typedef struct _tagstudent
+{
+	char strname[name_size];
+	int inumber;
+	int kor;
+	int eng;
+	int math;
+	int total;
+	int avg;
+
+}student, *pstudent;
+
+
+typedef struct _node
+{
+	student _tstudent;
+	struct _node* pnext;
+
+
+}node,*Pnode;
+
+typedef struct _taglist
+{
+	Pnode pbegin;
+	Pnode pend;
+	int isize;
+
+}LIST, *PLIST;
+
+int input()
+{
+	int input;
+	cin >> input;
+	if (cin.fail())
+	{
+		cin.clear();
+		cin.ignore(1024, '\n');
+		return INT_MAX;
+	}
+	return input;
+
+}
+
+void inputstring(char *pstring,int isize)
+{
+	cin.clear();
+	cin.ignore(1024, '\n');
+	cin.getline(pstring, isize - 1);
+
+}
+
+void initlist(PLIST plist)
+{
+	plist->pbegin = NULL;
+	plist->pend = NULL;
+	plist->isize = 0;
+	
+}
+void outputstudent(const pstudent pstudent)
+{
+	cout << "이름:" << pstudent->strname << "\t학번" << pstudent->inumber << endl;
+	cout << "국어:" << pstudent->kor << "\t영어" << pstudent->eng << endl;
+	cout << "수학" << pstudent->math << endl;
+	cout << "총점:" << pstudent->total << "\t평균" << pstudent->avg << endl;
+}
+
+
+void search(PLIST plist)
+{
+	system("cls");
+	cout << "=====학생탐색====" << endl;
+	cout << "탐색할 학생 이름 입력";
+	char strname[name_size] = {};
+	inputstring(strname, name_size);
+
+	Pnode pnode = plist->pbegin;
+	while (pnode != NULL)
+	{
+		if (strcmp(pnode->_tstudent.strname, strname) == 0)
+		{
+			outputstudent(&pnode->_tstudent);
+			system("pause");
+			return;
+		}
+		pnode = pnode->pnext;
+	}
+	cout << "학생이 없음";
+	system("pause");
+}
+
+int outmenu()
+{
+	system("cls");
+
+	cout << "1.학생추가"<<endl;
+	cout << "2.학생삭제"<<endl;
+	cout << "3.학생탐색"<<endl;
+	cout << "4.학생출력"<<endl;
+	cout << "5.종료"<<endl;
+
+	cout << "메뉴선택";
+	int menu = input();
+
+	if (menu <= m_node || menu > m_exit)
+	{
+		return m_node;
+	}
+	return menu;
+
+
+}
+
+void insert(PLIST plist)
+{
+	system("cls");
+	cout << "=====학생추가===="<<endl;
+	student tstudent = {};
+	cout << "이름";
+	inputstring(tstudent.strname, name_size);
+
+	cout << "학번";
+	tstudent.inumber = input();
+
+	cout<<"국어";
+	tstudent.kor = input();
+
+	cout << "영어";
+	tstudent.eng = input();
+
+	cout << "수학";
+	tstudent.math = input();
+
+	tstudent.total = tstudent.kor + tstudent.eng + tstudent.math;
+	tstudent.avg = tstudent.total / 3.f;
+	 
+
+	//추가할 노드 생성을 동적할당으로 즉시 생성한다.
+	Pnode pnode = new node;
+
+
+	pnode->pnext = NULL;
+
+	//학생정보는 지금 추가한 노드
+	pnode->_tstudent = tstudent;
+
+
+	//만약 지금 추가한 노드가 첫번째면 첫번째에 이 노드를 생성
+	if (plist->pbegin == NULL)
+
+		plist->pbegin = pnode;
+
+	//아니면 마지막 노드에서 다음 주소를 가르키는 next에 이 노드의 주소 생성
+	else
+		plist->pend->pnext = pnode;
+
+	//마지막 노드의 주소를 이 노드로 준다.
+	plist->pend = pnode;
+
+	//그래서 계속해서 노드를 생성할때 현재 end는 마지막(전) 노드의 주소를 가르키게 되고 그 안의 next에 추가할 노드의 주소를 생성한다.
+	//그후 end를 현재 노드의 주소로 설정해준다.
+
+	++plist->isize;
+}
+
+void clearlist(PLIST plist)
+{
+	Pnode pnode = plist->pbegin;
+
+
+	//pnode에 처음노드의 주소를 가리키고  주소가 null값이 될때까지 계속 다음 노드의 주소를 가르키며 삭제한다.
+	while (pnode != NULL)
+	{
+		Pnode pnext = pnode->pnext;
+		delete pnode;
+		pnode = pnext;
+	}  
+	plist->pbegin = NULL;
+	plist->pend = NULL;
+	plist->isize = 0;
+}
+//가리키는 대상의 값 변경 x
+
+void output(PLIST plist)
+{
+	system("cls");
+	cout << "=====학생출력====" << endl;
+
+	Pnode pnode = plist->pbegin;
+
+	while (pnode != NULL)
+	{
+		outputstudent(&pnode->_tstudent);
+		pnode = pnode->pnext;
+	}
+	cout << "학생수" << plist->isize << endl;
+	system("pause");
+}
+
+void Delete(PLIST plist)
+{
+	system("cls");
+	cout << "============학생삭제========" << endl;
+	cout << "삭제할 이름 입력:";
+	char strname[name_size] = {};
+	inputstring(strname, name_size);
+
+	Pnode pnode = plist->pbegin;
+	Pnode prev = NULL;
+
+	while (pnode != NULL)
+	{
+		if (strcmp(pnode->_tstudent.strname, strname) == 0)
+		{
+			//지울 노드의 다음노드 입력
+			Pnode pnext = pnode->pnext;
+
+			//만약 이전 노드가 NULL 즉 첫번째 값을 지웠을때 
+			if (prev == NULL)
+			{
+				delete pnode;
+				plist->pbegin = pnext;
+
+				if (pnext == NULL)
+					plist->pend = NULL;
+			}
+
+			//이전 노드가 있을경우 이전노드와 다음노드를 연결
+			else 
+			{
+				delete	pnode;
+				prev->pnext = pnext;
+
+				if (pnext == NULL)
+					plist->pend = prev;
+			}
+			cout << strname << "학생 삭제완료" << endl;
+			--plist->isize;
+			system("pause");
+			return;
+		}
+
+		//해당 학셍이 아니면 현재노드가 이전노드가됨
+		prev = pnode;
+		pnode = pnode->pnext;
+	}
+	cout << "삭제할 학생이없음" << endl;
+	system("pause");
+}
+
+int main()
+{
+	LIST tlist;
+
+	initlist(&tlist);
+
+	while (true)
+	{
+		int imenu = outmenu();
+		if (imenu == m_exit)
+			break;
+		switch (imenu)
+		{
+		case m_insert:
+			insert(&tlist);
+			break;
+		case m_delete:
+			Delete(&tlist);
+			break;
+		case m_search:
+			search(&tlist);
+			break;
+		case m_output:
+			output(&tlist);
+			break;
+		}
+				
+	}
+	clearlist(&tlist);
+
+	return 0;
+}

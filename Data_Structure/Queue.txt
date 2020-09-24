@@ -1,0 +1,118 @@
+
+#include<iostream>
+using namespace std;
+
+template <typename T>
+class Queuenode
+{
+
+private:
+	Queuenode():m_pnext(NULL),m_pprev(NULL)
+	{
+	}
+	~Queuenode()
+	{
+
+	}
+
+private:
+	template <typename T>
+	friend class Queue;
+
+private:
+	T m_data;
+	Queuenode<T>* m_pnext;
+	Queuenode<T>* m_pprev;
+
+};
+
+template <typename T>
+class Queue
+{
+
+public:
+	Queue()
+	{
+		m_pbegin = new node;
+		m_pend = new node;
+
+		m_pbegin->m_pnext = m_pend;
+		m_pend->m_pprev = m_pbegin;
+
+		m_isize = 0;
+	}
+
+	~Queue()
+	{
+
+	}
+
+private:
+
+	typedef Queuenode<T> node;
+	typedef Queuenode<T>* Pnode;
+
+private:
+	Pnode m_pbegin;
+	Pnode m_pend;
+	unsigned int m_isize;
+
+public:
+	void push(const T& data)
+	{
+		Pnode pnode = new node;
+		pnode->m_data = data;
+
+		Pnode pprev = m_pend->m_pprev;
+		pprev->m_pnext = pnode;
+		pnode->m_pprev = pprev;
+
+		pnode->m_pnext = m_pend;
+		m_pend->m_pprev = pnode;
+
+		++m_isize;
+	}
+
+	T pop()
+	{
+		if (empty())
+			return 0;
+		Pnode pnode = m_pbegin->m_pnext;
+
+		T data = pnode->m_data;
+
+		//begin의 다음노드를 지우므로 begin과 지울노드의 다음노드를 서로 연결
+
+		//begin의 next로 지울노드의 다음노드
+		m_pbegin->m_pnext = pnode->m_pnext;
+
+		//지울노드의 다음노드의 이전노드는 begin
+		pnode->m_pnext->m_pprev = m_pbegin;
+
+		delete pnode;
+
+		--m_isize;
+
+		return data;
+	}
+
+	bool empty()
+	{
+		return m_isize == 0;
+	}
+};
+
+int main()
+{
+	Queue<int> queue;
+
+	for (int i = 0; i < 100; ++i)
+	{
+		queue.push(i + 1);
+	}
+
+	while (!queue.empty())
+	{
+		cout << queue.pop() << endl;
+	}
+}

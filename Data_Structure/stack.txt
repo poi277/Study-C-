@@ -1,0 +1,142 @@
+#include <iostream>
+
+using namespace std;
+template<typename T>
+class Cstacknode
+{
+
+private:
+
+	Cstacknode() :m_pnext(NULL)
+	{
+
+	}
+
+	~Cstacknode()
+	{
+
+	}
+
+
+private:
+	template<typename T>
+	friend class Cstack;
+
+private:
+	T m_data;
+	Cstacknode<T>* m_pnext;
+};
+
+
+template<typename T>
+class Cstack
+{
+public:
+	Cstack()
+	{
+		m_pbegin = new node;
+		m_pend = new node;
+
+		m_pbegin->m_pnext = m_pend;
+
+		m_isize = 0;
+	}
+
+	~Cstack()
+	{
+		//소멸할때 모든 노드를 지움
+
+		Pnode pnode = m_pbegin;
+		while (pnode)
+		{
+			Pnode pnext = pnode->m_pnext;
+			delete pnode;
+			pnode = pnext;
+		}
+	}
+
+
+
+private:
+
+	typedef Cstacknode<T> node;
+	typedef Cstacknode<T>* Pnode;
+
+private:
+
+	Pnode m_pbegin;
+	Pnode m_pend;
+	unsigned int m_isize;
+
+public:
+	void push(const T& data)
+	{
+
+		//노드 하나 추가
+		Pnode pnode = new node;
+
+		//추가한 노드의 데이터를 집어넣음
+		pnode->m_data = data;
+
+		//다음 노드는 시작노드의 다음노드
+		Pnode pnext = m_pbegin->m_pnext;
+
+		//추가한 노드의 다음노드는 시작노드의 다음노드
+		pnode->m_pnext = pnext;
+
+		//시작노드의 다음노드는 추가한노드
+		m_pbegin->m_pnext = pnode;
+		++m_isize;
+	}
+
+	T pop()
+	{
+		if (empty())
+			return 0;
+
+		//가져올 노드는 begin의 다음노드
+		Pnode pnode = m_pbegin->m_pnext;
+
+		//가져올 노드를 지워줄려면 begin과 가져올 노드의 다음노드를 연결
+		Pnode pnext = pnode->m_pnext;
+
+		T data = pnode->m_data;
+
+		delete pnode;
+
+		m_pbegin->m_pnext = pnext;
+		--m_isize;
+
+		return data;
+	}
+
+	T top()
+	{
+		if (empty())
+			return 0;
+
+		return m_pbegin->m_pnext->m_data;
+	}
+	bool empty()
+	{
+		return m_isize == 0;
+	}
+};
+
+
+int main()
+{
+	Cstack<int> stackint;
+
+	for (int i = 0; i < 100; ++i)
+	{
+		stackint.push(i + 1);
+	}
+
+	while (!stackint.empty())
+	{
+		cout << stackint.pop() << endl;
+	}
+
+	return 0;
+}

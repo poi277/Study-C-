@@ -1,0 +1,94 @@
+#include <iostream>
+using namespace std;
+
+class parent
+{
+public:
+	parent()
+	{
+		cout << "parent 생성자" << endl;
+	}
+	~parent()
+	{
+		cout << "parent 소멸자" << endl;
+	}
+
+	void output()
+	{
+		cout << a << endl;
+		cout << b << endl;
+		cout << c << endl;
+	}
+
+public:
+	int a;
+protected:
+	int b;
+private:
+	int c;
+};
+
+class child :public parent
+{
+public:
+	child()
+	{
+		b = 20;
+		// c = 30; 상속이라도 private이라 안됨
+		cout << "child 생성자" << endl;
+	}
+
+	~child()
+	{
+		cout << "child 소멸자" << endl;
+	}
+protected:
+	int d;
+};
+
+class child1 :private parent
+{
+public:
+	child1()
+	{
+		cout << "child1 생성자" << endl;
+	}
+	~child1()
+	{
+		cout << "child1 소멸자" << endl;
+	}
+private:
+	int d;
+};
+
+class childchild :public child
+{
+public:
+	childchild()
+	{
+		d = 500;
+		cout << "childchild 생성자" << endl;
+	}
+
+	~childchild()
+	{
+		cout << "childchild 소멸자" << endl;
+	}
+private:
+	int e;
+};
+
+int main()
+{
+	parent parent;
+	child child;
+	child1 child1;
+	childchild childchild;
+
+	parent.a = 10;
+	child.a = 10;
+	//child1.a = 10; 부모클래스가 priavte으로 상속을 줬기때문에 외부에서 접근이 불가능하다. 단 내부에서는 접근이 가능하다.
+	//child1.output(); 마찬가지이다.
+
+	//생성자 호출 순서는 부모에서 자식순이다.
+	//소멸자

@@ -1,0 +1,477 @@
+#include <iostream>
+#define name_size 32
+using namespace std;
+
+enum main
+{
+	m_node,
+	m_insert,
+	m_delete,
+	m_search,
+	m_output,
+	m_sort,
+	m_exit
+};
+
+enum output_type
+{
+	ot_node,
+	ot_output,
+	ot_inverse
+};
+
+enum sort_type
+{
+	st_none,
+	st_number,
+	st_avg,
+	st_back
+};
+
+enum sort_option
+{
+	so_none,
+	so_crive,
+	so_discrive,
+};
+
+typedef struct _tagstudent
+{
+	char strname[name_size];
+	int inumber;
+	int kor;
+	int eng;
+	int math;
+	int total;
+	int avg;
+
+}student, * pstudent;
+
+
+typedef struct _node
+{
+	student _tstudent;
+	struct _node* pprev;
+	struct _node* pnext;
+
+
+}node, *Pnode;
+
+typedef struct _taglist
+{
+	Pnode pbegin;
+	Pnode pend;
+	int isize;
+
+}LIST, * PLIST;
+int input()
+{
+	int input;
+	cin >> input;
+	if (cin.fail())
+	{
+		cin.clear();
+		cin.ignore(1024, '\n');
+		return INT_MAX;
+	}
+	return input;
+
+}
+
+int outmenu()
+{
+	system("cls");
+
+	cout << "1.학생추가" << endl;
+	cout << "2.학생삭제" << endl;
+	cout << "3.학생탐색" << endl;
+	cout << "4.학생출력" << endl;
+	cout << "5.학생 정렬" << endl;
+	cout << "6.종료" << endl;
+
+	cout << "메뉴선택";
+	int menu = input();
+
+	if (menu <= m_node || menu > m_exit)
+	{
+		return m_node;
+	}
+	return menu;
+
+
+}
+
+void inputstring(char* pstring, int isize)
+{
+	cin.clear();
+	cin.ignore(1024, '\n');
+	cin.getline(pstring, isize - 1);
+
+}
+
+void outputstudent(const pstudent pstudent)
+{
+	cout << "이름: " << pstudent->strname << "\t학번: " << pstudent->inumber << endl;
+	cout << "국어: " << pstudent->kor << "\t영어 :" << pstudent->eng << "수학 " << pstudent->math << endl;
+	cout << "총점: " << pstudent->total << "\t평균: " << pstudent->avg << endl;
+}
+
+
+void initlist(PLIST plist)
+{
+	//기본설정
+
+
+	plist->isize = 0;
+
+	plist->pbegin = new node;
+	plist->pend = new node;
+
+	//시작노드의 다음노드는 마지막 노드
+	plist->pbegin->pnext = plist->pend;
+
+	//마지막 노드의 이전노드는 시작노드
+	plist->pend->pprev = plist->pbegin;
+
+	//마지막 노드의 다음 노드는 없으니 널
+	plist->pend->pnext = NULL;
+
+	//시작노드의 시전노드도 없으니 널
+	plist->pbegin->pprev = NULL;
+
+}
+
+void push_back(PLIST plist)
+{
+	system("cls");
+	cout << "=====학생추가====" << endl;
+	student tstudent = {};
+	cout << "이름";
+	inputstring(tstudent.strname, name_size);
+
+	cout << "학번";
+	tstudent.inumber = input();
+
+	cout << "국어";
+	tstudent.kor = input();
+
+	cout << "영어";
+	tstudent.eng = input();
+
+	cout << "수학";
+	tstudent.math = input();
+
+	tstudent.total = tstudent.kor + tstudent.eng + tstudent.math;
+	tstudent.avg = tstudent.total / 3.f;
+
+	Pnode pnode = new node;
+
+	pnode->_tstudent = tstudent;
+
+	//새로 추가되는 노드는 end노드의 이전노드와 end노드의 사이에 추가
+	//그래서 pend의 prev 노드를 구함
+	Pnode pprev = plist->pend->pprev;
+
+	//pend노드 이전의 노드의 다음으로 추가할 노드를 지정
+	pprev->pnext = pnode;
+
+	//추가할 노드의 이전노드로 end의 이전노드를 지정
+	pnode->pprev =pprev;
+
+	//새로 추가할 노드의 다음노드를 pend에 연결
+	pnode->pnext = plist->pend;
+
+	//pend노드의 이전 노드로 새로 추가할 노드 지정
+	plist->pend->pprev = pnode;
+
+	++plist->isize;
+}
+
+void output(PLIST plist)
+{
+	int imenu;
+	while (true)
+	{
+		system("cls");
+		cout << "=====학생출력====" << endl;
+		cout << "1.정방향 출력" << endl;
+		cout << "2.역방향 출력" << endl;
+		cout << "메뉴 선택" << endl;
+
+		imenu = input();
+
+		if (imenu > ot_node && imenu <= ot_inverse)
+			break;
+	}
+
+	Pnode pnode = NULL;
+	switch (imenu)
+	{
+	case ot_output:
+
+		//추가되는 노드들은 begin과 end사이에 배치,그러므로 begin의 다음노드 얻음
+		pnode = plist->pbegin->pnext;
+
+		//노드가 end노드와 같아지면 더이상 출력할 노드가 없으므로 반복종료하게만듬
+		while (pnode != plist->pend)
+		{
+			outputstudent(&pnode->_tstudent);
+			pnode = pnode->pnext;
+		}
+		break;
+	case ot_inverse:
+
+		//역방향으로 출력을 할땐 end의 이전노드를 얻어오고 계속 이전노드로 진행.
+		//begin과 같아질경우 반복종료
+
+		pnode = plist->pend->pprev;
+
+		//역방향으로 들어가기 때문에 노드가 begin과 같아지면 출력할 노드가 없어서 반복종료하게만듬
+		while (pnode != plist->pbegin)
+		{
+			outputstudent(&pnode->_tstudent);
+			pnode = pnode->pprev;
+		}
+		break;
+	}
+
+	cout << "학생수 :" << plist->isize << endl;
+	system("pause");
+}
+
+void search(PLIST plist)
+{
+	system("cls");
+	cout << "=====학생탐색====" << endl;
+	cout << "탐색할 학생 이름 입력";
+	char strname[name_size] = {};
+	inputstring(strname, name_size);
+
+	Pnode pnode = plist->pbegin->pnext;
+
+	while (pnode != plist->pend)
+	{
+		if (strcmp(pnode->_tstudent.strname, strname) == 0)
+		{
+			outputstudent(&pnode->_tstudent);
+			system("pause");;
+			return;
+		}
+		pnode = pnode->pnext;
+	}
+	cout << "찾는 학생이 목록에 없음" << endl;
+	system("pause");
+
+}
+
+void Delete(PLIST plist)
+{
+	system("cls");
+	cout << "=====학생탐색====" << endl;
+	cout << "탐색할 학생 이름 입력";
+	char strname[name_size] = {};
+	inputstring(strname, name_size);
+
+	Pnode pnode = plist->pbegin->pnext;
+
+	while (pnode != plist->pend)
+	{
+		if (strcmp(pnode->_tstudent.strname, strname) == 0)
+		{
+			//현재 지울노드의 이전노드의 다음은 현재 지울노드이다.
+			//지울노드는 지워져야 해서 이전노드의 다음노드를 지울노드의 다음노드로 설정해준다
+			//다음노드의 이전은 현재노드인데 이전노드로 준다.
+			pnode->pprev->pnext = pnode->pnext;
+			pnode->pnext->pprev = pnode->pprev;
+			delete pnode;
+			--plist->isize;
+			cout << strname << "학생 삭제 완료" << endl;
+			system("pause");
+			return;
+		}
+		pnode = pnode->pnext;
+	}
+	cout << "삭제할 학생이 목록에 없음" << endl;
+	system("pause");
+}
+
+void sort(PLIST plist)
+{
+	system("cls");
+	cout << "=========학생정렬==========" << endl;
+	cout << "1.학점기준" << endl;
+	cout << "2.평균기준" << endl;
+	cout << "메뉴 선택하세요" << endl;
+
+	int intput = input();
+
+	if (intput <= st_none || intput > st_avg)
+	{
+		cout << "잘못선택함" << endl;
+		system("pause");
+		return;
+	}
+
+	cout << endl;
+	cout << "1.오름차순" << endl;
+	cout << "2.내림차순" << endl;
+	cout << "메뉴 선택하세요" << endl;
+	int ioption = input();
+	if (ioption <= so_none || ioption > so_discrive)
+	{
+		cout << "잘못선택함" << endl;
+		system("pause");
+		return;
+	}
+
+	Pnode pfirst = plist->pbegin->pnext;
+	Pnode psecond = pfirst->pnext;
+
+	//first는 end의 이전노드와 같아지게 되면 더이상 비교할 노드가 없으므로 종료
+
+	while (pfirst != plist->pend->pprev)
+	{
+		//second는 무조건 first노드 다음노드부터 검사를 시작.
+		psecond = pfirst->pnext;
+
+		//second는 end이전까지 반복해야하므로 end가 아닐동안만 반복.
+		while (psecond != plist->pend)
+		{
+			bool bswap = false;
+			switch (intput)
+			{
+			case st_number:
+				switch (ioption)
+				{
+				case so_crive:
+					if (pfirst->_tstudent.inumber > psecond->_tstudent.inumber)
+						bswap = true;
+					break;
+				case so_discrive:
+					if (pfirst->_tstudent.inumber < psecond->_tstudent.inumber)
+						bswap = true;
+					break;
+				}
+				break;
+			case st_avg:
+				switch (ioption)
+				{
+				case so_crive:
+					if (pfirst->_tstudent.avg > psecond->_tstudent.avg)
+						bswap = true;
+					break;
+				case so_discrive:
+					if (pfirst->_tstudent.avg < psecond->_tstudent.avg)
+						bswap = true;
+					break;
+				}
+				break;
+			}
+			//bool변수 bswap이 true일 경우 두노드를 바꿔야함
+
+			if (bswap)
+			{
+				//first 노드의 이전과 다음노드 저장
+				Pnode pfirstprev = pfirst->pprev;
+				Pnode pfirstnext = pfirst->pnext;
+
+				//second노드의 이전과 다음노드를 저장.
+				Pnode psecondprev = psecond->pprev;
+				Pnode psecondnext = psecond->pnext;
+
+
+				pfirstprev->pnext = psecond;
+				psecond->pprev = pfirstprev;
+
+				//바꾸려는 두 노드가 붙어있지 않은경우
+				if (psecond != pfirstnext)
+				{
+					pfirstnext->pprev = psecond;
+					psecond->pnext = pfirstnext;
+
+					psecondprev->pnext = pfirst;
+					pfirst->pprev = psecondprev;
+				}
+
+				//붙어있는경우
+				else
+				{
+					psecond->pnext = pfirst;
+					pfirst->pprev = psecond;
+
+				}
+				psecondnext->pprev = pfirst;
+				pfirst->pnext = psecondnext;
+
+				//두 노드를 바꿈
+				Pnode ptemp = pfirst;
+				pfirst = psecond;
+				psecond = ptemp;
+			}
+			psecond = psecond->pnext;
+		}
+		pfirst = pfirst->pnext;
+	}
+	cout << "정렬완료" << endl;
+	system("pause");
+}
+
+
+void destroy(PLIST plist)
+{
+	Pnode pnode = plist->pbegin;
+
+	while (pnode !=NULL)
+	{
+		Pnode pnext = pnode->pnext;
+		delete pnode;
+		pnode = pnext;
+	}
+
+	plist->isize = 0;
+	plist->pbegin = NULL;
+	plist->pend = NULL;
+}
+
+
+
+
+
+
+int main()
+{
+	LIST list;
+
+	initlist(&list);
+
+	while (true)
+	{
+		int imenu = outmenu();
+		if (imenu == m_exit)
+			break;
+		switch (imenu)
+		{
+		case m_insert:
+			push_back(&list);
+			break;
+		case m_delete:
+			Delete(&list);
+			break;
+		case m_search:
+			search(&list);
+			break;
+
+		case m_sort:
+			sort(&list);
+			break;
+		case m_output:
+			output(&list);
+			break;
+		}
+
+	}
+
+	destroy(&list);
+
+	return 0;
+}

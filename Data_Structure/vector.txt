@@ -1,0 +1,146 @@
+#include <iostream>
+
+using namespace std;
+
+template<typename T>
+class cvectornode
+{
+
+public:
+
+private:
+	cvectornode()
+	{
+
+	}
+	~cvectornode()
+	{
+
+	}
+
+	template<typename T>
+	friend class cvector;
+	T m_data;
+	int m_index;
+};
+
+template<typename T>
+class cvector
+{
+public:
+	cvector()
+	{
+		m_isize = 0;
+		m_icapasity = 2;
+
+		m_parray = new node[m_icapasity + 2];
+	}
+	cvector(int isize)
+	{
+		m_parray = new node[isize + 2];
+		m_icapasity = isize;
+		m_isize = 0;
+	}
+	~cvector()
+	{
+
+	}
+
+public:
+
+	void push_back(const T& data)
+	{
+		if (full())
+			resize(m_isize * 2);
+
+		m_parray[m_isize + 1].m_data = data;
+		m_parray[m_isize + 1].m_index = m_isize;
+		++m_isize;
+	}
+
+	void resize(int isize)
+	{
+		pnode parray = new node[isize + 2];
+
+		//위에서 2배만큼 공간을 새로할당, 기존에 있던 노드의 데이터를 새로 할당한 공간에 복사
+		//1번 인덱스부터 시작이기 때문에 +1
+		memcpy(parray + 1, m_parray + 1, sizeof(node) * m_isize);
+
+		//기존 노드 삭제
+		delete[] m_parray;
+
+		m_parray = parray;
+
+		m_icapasity = isize;
+	}
+
+	void clear()
+	{
+		delete[] m_parray;
+		m_isize = 0;
+		m_icapasity = 2;
+		m_parray = new node[m_icapasity + 2];
+	}
+
+	bool full()
+	{
+		return m_isize ==m_icapasity;
+	}
+
+	bool empty()
+	{
+		return m_isize == 0;
+	}
+
+	unsigned int size() const
+	{
+		return m_isize;
+	}
+	unsigned int capasity() const
+	{
+		return m_icapasity;
+	}
+	T operator [](int idx)
+	{
+		return m_parray[idx + 1].m_data;
+	}
+
+	void reserve(int isize)
+	{
+		delete[] m_parray;
+		m_parray = new node[isize + 2];
+
+		m_icapasity = isize;
+		m_isize = 0;
+		
+	}
+
+private:
+	typedef cvectornode<T> node;
+	typedef cvectornode<T>* pnode;
+
+	pnode m_parray;
+	unsigned int m_isize;
+	unsigned int m_icapasity;
+};
+
+
+
+
+int main()
+{
+	cvector<int> vector;
+
+	vector.reserve(100);
+
+	for (int i = 0; i < 100; ++i)
+	{
+		vector.push_back(i + 1);
+	}
+
+	for (int i = 0; i < vector.size(); ++i)
+	{
+		cout << vector[i] << endl;
+	}
+	return 0;
+}
