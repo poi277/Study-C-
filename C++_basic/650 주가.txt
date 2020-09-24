@@ -1,0 +1,108 @@
+#include <iostream>
+#include "asd.h"
+#include <string>
+
+class stock
+{
+public:
+	void acquire(const std::string& co, long n, double pr);
+	void buy(long num, double price);
+	void sell(long num, double price);
+	void update(double price);
+	void show();
+
+private:
+	std::string company;
+	long shares;
+	double share_val;
+	double total_val;
+
+	void set_tot() { 
+		total_val = shares * share_val; 
+	}
+
+};
+
+
+void stock::acquire(const std::string &co, long n, double pr)
+{
+	company = co;
+
+	if (n < 0)
+	{
+		std::cout << "주식 수는 음수가 될수 없으므로," << company << "shares를 0으로 설정합니다.\n";
+
+		shares = 0;
+	}
+	else
+		shares = n;
+	share_val = pr;
+	set_tot();
+}
+
+void stock::buy(long num, double price)
+{
+	if (num < 0)
+	{
+		std::cout << "매입이 주식수는 음수가 될수 없으므로,거래가 취소되었습니다\n";
+
+	}
+	else
+	{
+		shares += num;
+		share_val = price;
+		set_tot();
+	}
+}
+void stock::sell(long num, double price)
+{
+	using std::cout;
+	if (num < 0)
+	{
+		cout << "매도 주식 수는 음수가 될수 없으므로, 거래가 취소되었습니다\n";
+	}
+	else if (num < shares)
+	{
+		cout << "보유 주식보다 많은 주식을 매도할수 없으므로,거래가 취소되었습니다";
+
+	}
+	else
+	{
+		shares -= num;
+		share_val = price;
+		set_tot();
+	}
+}
+
+void stock::update(double price)
+{
+	share_val = price;
+	set_tot();
+}
+void stock::show()
+{
+	std::cout << "회사명" << company
+		<< "주식수" << shares << '\n'
+		<< "주가 $" << share_val
+		<< "주식 총 가치:$" << total_val << '\n';
+}
+
+
+
+
+int main()
+{
+	stock qwe;
+	qwe.acquire("nanosmart", 20, 12.50);
+	qwe.show();
+	qwe.buy(15, 18.125);
+	qwe.show();
+	qwe.sell(400, 20.00);
+	qwe.show();
+	qwe.buy(300000, 40.125);
+	qwe.show();
+	qwe.sell(300000, 0.125);
+	qwe.show();
+	return 0;
+}
+//메인>클래스>함수

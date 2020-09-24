@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+const int num = 5;
+
+
+int main()
+{
+	using std::vector;
+	using std::string;
+	using std::cin;
+	using std::cout;
+	using std::endl;
+	
+	vector<int> ratings(num);
+	vector<string> titles(num);
+	
+	cout << num << "개의 책 제목과 책 등급을 입력하세요\n";
+	int i;
+	for (i = 0; i < num; i++)
+	{
+		cout << i + 1 << "번의 제목을 입력하세요";
+		getline(cin, titles[i]);
+	
+		cout << i + 1 << "번의 책의 등급을 입력하세요";
+		cin >> ratings[i];
+		cin.get();
+		
+
+	}
+
+	cout << "입력 출력\n";
+
+	for (i = 0; i < num; i++)
+	{
+		cout << ratings[i] << "\t" << titles[i]<<endl;
+	}
+
+	return 0;
+}

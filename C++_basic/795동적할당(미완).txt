@@ -1,0 +1,95 @@
+#include <iostream>
+#include "asd.h"
+#include <cstring>
+
+using namespace std;
+
+
+class stringbad
+{
+public:
+	stringbad(const char* s);
+	stringbad();
+	~stringbad();
+
+private:
+	char* str;
+	int len;
+	static int num_string;
+
+	friend std::ostream & operator <<  (std::ostream& os, const stringbad& st);
+};
+int stringbad::num_string = 0;
+
+stringbad::stringbad(const char* s)
+{
+	len = std::strlen(s);
+	str = new char[len + 1];
+	std::strcpy(str,s);
+	num_string++;
+	cout << num_string << ":\"" << str << "\"객체생성\n";
+}
+stringbad::stringbad()
+{
+	len = 4;
+	str = new char[4];
+	std::strcpy(str,"c++");
+	num_string++;
+	cout << num_string << ":\"" << str << "\"디폴트 객체 생성\n";
+
+}
+stringbad::~stringbad()
+{
+	cout << "\"" << str << "\"객체 파괴,";
+	--num_string;
+	cout << "남은 객체수:" << num_string << "\n";
+	delete[] str;
+}
+
+std::ostream& operator<<(std::ostream& os, const stringbad& st)
+{
+	os << st.str;
+	return os;
+}
+
+void callme1(stringbad&);
+void callme2(stringbad);
+
+int main()
+{
+	{
+		cout << "내부 블럭 시작\n";
+		stringbad headline1("celery stalks at midnight");
+		stringbad headline2("lettuce pery");
+		stringbad sports("spinach leaves bowl for dollars");
+		cout << "headline1:" << headline1 << endl;
+		cout << "headline2:" << headline2 << endl;
+		cout << "sports:" << sports << endl;
+		callme1(headline1);
+		cout << "headline1:" << headline1 << endl;
+		callme2(headline2);
+		cout << "headline2" << headline2 << endl;
+		cout << "하나의 다른 객체를 다른 객체로 초기화:\n";
+		stringbad sailor = sports;
+		cout << "하나의 객체를 ㄷ ㅏ른 객체에 대입:\n";
+		stringbad knot;
+		knot = headline2;
+		cout << "knot:" << knot << endl;
+		cout << "이 블럭을 빠져나온다";
+	}
+	cout << "main 의 끝\n";
+	return 0;
+}
+
+void callme1(stringbad& rsb)
+{
+	cout << "참조로 전달된 stringbad:\n";
+	cout << "    \"" << rsb << "\"\n";
+}
+
+void callme2(stringbad sb)
+{
+	cout << "값으로 전달된 stringbad:\n";
+	cout << "    \"" << sb << "\"\n";
+}
+

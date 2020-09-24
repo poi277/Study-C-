@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+
+template<typename T1,typename T2>
+class pair
+{
+private:
+	T1 a;
+	T2 b;
+
+public:
+	T1& first();
+	T2& second();
+	T1 first() const { return a; }
+	T2 second() const { return b; }
+
+	pair(const T1& aval, const T2& bval):a(aval),b(bval) {};
+	pair() {};
+};
+
+template<typename T1, typename T2>
+T1& pair<T1, T2>::first()
+{
+	return a;
+}
+
+template<typename T1, typename T2>
+T2& pair<T1, T2>::second()
+{
+	return b;
+}
+
+int main()
+{
+	using std::cout;
+	using std::endl;
+	using std::string;
+
+	pair<string, int> rating[4] =
+	{
+		pair<string,int>("에스토크",1),
+		pair<string,int>("프뉴마",2),
+		pair<string,int>("브람스",3),
+		pair<string,int>("아스트레이",4)
+
+	};
+
+	int joint = sizeof(rating) / sizeof(pair<string, int>); //ratirng 은 (28+4)*4=128    /32를하는거임. =4
+
+	cout << "배등급:\t 종류\n";
+	for (int i = 0; i < joint; i++)
+	{
+		cout << rating[i].second() << "\t" << rating[i].first() << endl;
+	}
+
+	cout << "조정된 배 이름과 등급:" << rating[2].second() <<"\t"<< rating[2].first();
+	cout << endl;
+	rating[2].first() = "에이번의 상처";
+	rating[2].second() = 4;
+
+	for (int i = 0; i < joint; i++)
+	{
+		cout << rating[i].second() << "\t" << rating[i].first() << endl;
+	}
+	return 0;
+
+}									 

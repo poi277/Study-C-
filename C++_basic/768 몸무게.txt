@@ -1,0 +1,95 @@
+#include <iostream>
+#include "asd.h"
+using std::cout;
+
+
+class stonewt
+{
+
+public:
+	stonewt(double lbs);
+	stonewt(int stn, double lbs);
+	stonewt();
+	~stonewt();
+	void show_lbs()const;
+	void show_stn()const;
+
+private:
+	enum { lbs_per_stn = 14 };
+	int stone;
+	double pds_left;
+	double pounds;
+
+
+};
+
+
+void display(const stonewt &st, int n);
+
+stonewt::stonewt(double lbs)
+{
+	stone = int(lbs) / lbs_per_stn;
+	pds_left = int(lbs) % lbs_per_stn + lbs - int(lbs);
+	pounds = lbs;
+}
+
+stonewt::stonewt(int stn, double lbs)
+{
+	stone = stn;
+	pds_left = lbs;
+	pounds = stn * lbs_per_stn + lbs;
+}
+
+stonewt::stonewt()
+{
+	stone = pounds = pds_left = 0;
+}
+
+stonewt::~stonewt()
+{
+}
+
+void stonewt::show_stn()const
+{
+	cout << stone << "스톤," << pds_left << "파운드\n";
+}
+
+void stonewt::show_lbs()const
+{
+	cout << pounds << "파운드\n";
+}
+
+void display(const stonewt& st, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "와!";
+		st.show_stn();
+	}
+}
+
+
+int main()
+{
+	stonewt pavarotti = 275;
+	stonewt wolfe=(285.7);
+	stonewt taft(21, 8);
+	
+	cout << "테너 가수의 몸무게:";
+	pavarotti.show_stn();
+	cout << "탐정의 몸무게:";
+	wolfe.show_stn();
+	cout << "대통령의 몸무게:";
+	taft.show_lbs();
+	pavarotti = 276.8;
+	taft=325;
+	cout << "저녁을 마친후의 테너가수의 몸무게:";
+	pavarotti.show_stn();
+	cout << "저녁을 마친후의 대통령의 몸무게:";
+	taft.show_lbs();
+	display(taft, 2);
+	cout << "레슬링 선수는 그보다 더 무겁다.\n";
+	display(422,2);
+	cout << "비만은 건강의 최대의 적이다.\n";
+	return 0;
+}

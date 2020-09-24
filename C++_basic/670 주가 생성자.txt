@@ -1,0 +1,139 @@
+#include <iostream>
+#include "asd.h"
+#include <string>
+
+
+class stock
+{
+public:
+	stock();
+	stock(const std::string& co, long n = 0, double pr = 0.0);
+	~stock();
+	void buy(long num, double price);
+	void sell(long num, double price);
+	void update(double price);
+	void show();
+
+private:
+	std::string company;
+	long shares;
+	double share_val;
+	double total_val;
+	void set_tot() { total_val = shares * share_val; }
+
+};
+
+stock::stock()
+{
+	std::cout << "디폴트 생성자 호출\n";
+	company = "no name";
+	shares = 0;
+	share_val = 0.0;
+	total_val = 0.0;
+}
+
+stock::stock(const std::string  &co, long n, double pr)
+{
+	company = co;
+
+	if (n < 0)
+	{
+		std::cout << "주식 수는 음수가 될수 없으므로," << company << "shares를 0으로 설정합니다.\n";
+
+		shares = 0;
+	}
+	else
+		shares = n;
+	share_val = pr;
+	set_tot();
+}
+
+stock::~stock()
+{
+	std::cout << "안녕," << company << "\n";
+}
+
+void stock::buy(long num, double price)
+{
+	if (num < 0)
+	{
+		std::cout << "매입이 주식수는 음수가 될수 없으므로,거래가 취소되었습니다\n";
+
+	}
+	else
+	{
+		shares += num;
+		share_val = price;
+		set_tot();
+	}
+}
+void stock::sell(long num, double price)
+{
+	using std::cout;
+	if (num < 0)
+	{
+		cout << "매도 주식 수는 음수가 될수 없으므로, 거래가 취소되었습니다\n";
+	}
+	else if (num > shares)
+	{
+		cout << "보유 주식보다 많은 주식을 매도할수 없으므로,거래가 취소되었습니다";
+
+	}
+	else
+	{
+		shares -= num;
+		share_val = price;
+		set_tot();
+	}
+}
+
+void stock::update(double price)
+{
+	share_val = price;
+	set_tot();
+}
+
+void stock::show()
+{
+	using std::cout;
+	using std::ios_base;
+	ios_base::fmtflags orig = cout.setf(ios_base::fixed, ios_base::floatfield);
+	std::streamsize prec = cout.precision(3);
+
+	cout << "회사명:" << company << "주식수:" << shares << '\n';
+
+	cout << "주가:$"<<share_val;
+
+	cout.precision(2);
+	cout << "주식 총 가치$:" << total_val << '\n';
+
+	cout.setf(orig, ios_base::floatfield);
+	cout.precision(prec);
+}
+
+int main()
+{
+	{
+		using std::cout;
+		cout << "생성자를 사용하여 새로운 객체들을 생성한다.\n";
+		stock stock1("nanosmart", 12, 20.20);
+		stock1.show();
+		stock stock2 = stock("boffo object", 2, 2.0);
+		stock2.show();
+
+		cout << "stock1을 stock2에 대입한다.\n";
+		stock2 = stock1;
+		cout << "stock1과 stock2를 출력";
+		stock1.show();
+		stock2.show();
+
+		cout << "생성자를 사용하여 객체 재 설정\n";
+		stock1 = stock("nifry foods", 10, 50.0);
+		cout << "갱신된 stock1:\n";
+		stock1.show();
+
+		cout << "프로그램 종료\n";
+	}
+
+	return 0;
+}

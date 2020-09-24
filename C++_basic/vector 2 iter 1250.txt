@@ -1,0 +1,102 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+
+struct Review
+{
+	std::string title; //using namespace std가 안되어있기때문에 해줘야함
+	int rating;
+
+};
+
+bool FillReview(Review& rr);
+void ShowReview(const Review& rr);
+
+int main()
+{
+	using std::cout;
+	using std::vector;
+
+	vector<Review> book;
+
+	Review temp;
+
+	while (FillReview(temp))
+		book.push_back(temp);
+
+	int num = book.size();
+	if (num > 0)
+	{
+		cout << "입력 출력\n" << "등급\t제목\n";
+
+		for (int i = 0; i < num; i++)
+			ShowReview(book[i]);
+
+		cout << "한번 더입력 출력\n" << "등급\t제목\n";
+
+		vector<Review>::iterator iter; //반복하게 돌 iterator을 구현 변수명은 iter
+
+		for (iter = book.begin(); iter != book.end(); iter++)
+			ShowReview(*iter); //주소값으로 줘야한다.배열은 주소기때문에 위는 괜찮다.
+
+		vector<Review> cpybook(book); //cpybook에다가 book을 복사생성한다.
+
+		if (num > 3)
+		{
+			//원소 두개 삭제
+			book.erase(book.begin() + 1, book.begin() + 3); //+1부터 +3미만을 지움
+			cout << "삭제 한후:\n";
+
+			for (iter = book.begin(); iter != book.end(); iter++)
+				ShowReview(*iter);
+
+			//원소 1개삽입
+			book.insert(book.begin(), cpybook.begin() + 1, cpybook.begin() + 2);
+			cout << "삽입 한후";
+
+			for (iter = book.begin(); iter != book.end(); iter++)
+				ShowReview(*iter);
+		}
+
+		book.swap(cpybook);
+		cout << "book과 cpybook을 교환 한 후";
+
+		for (iter = book.begin(); iter != book.end(); iter++)
+			ShowReview(*iter);
+
+	}
+	else
+
+		cout << "입력한게 없어서 종료";
+
+	return 0;
+
+}
+
+bool FillReview(Review& rr)
+{
+	std::cout << "책 제목 입력 (끝내려면 q입력)";
+	std::getline(std::cin, rr.title);
+
+	if (rr.title == "q")
+		return false;
+
+	std::cout << "책 등급 입력";
+	std::cin >> rr.rating;
+	if (!std::cin)
+		return false;
+
+	while (std::cin.get() != '\n')
+		continue;
+
+	return true;
+
+	return true;
+}
+
+void ShowReview(const Review& rr)
+{
+	std::cout << rr.rating << "\t" << rr.title << std::endl;
+}
+

@@ -1,0 +1,263 @@
+/*
+#include <iostream>
+
+using namespace std;
+
+class color {
+
+public:
+
+	color()
+	{
+		r = 0;
+		g = 0;
+		b = 0;
+	}
+	color(float r, float g, float b) :r(r), g(g), b(b) {}
+
+	float getr() { return r; }
+	float getg() { return g; }
+	float getb() { return b; }
+
+private:
+	float r;
+	float g;
+	float b;
+
+};
+
+color mixcolor(color a, color b)
+{
+	return color((a.getr() + b.getr()) / 2, (a. getg(), b.getg()) / 2, (a.getb() + b.getb()) / 2);
+}
+
+int main() {
+	color blue(0, 0, 1);
+	color red(1, 0, 0);
+
+	color purple = mixcolor(blue, red);
+
+	cout << "r= " << purple.getr()<<"g= " << purple.getg() << "b= " << purple.getb() << endl;
+}
+
+
+
+#include <iostream>
+
+using namespace std;
+
+class account {
+public:
+	account() :money(0) {}
+	account(int money) :money(money) {}
+
+	void deposit(const int d) {
+		money += d;
+		cout << d << "원 예금" << endl;
+	}
+
+	void draw(const int d) {
+		if (money >= d) {
+			money -= d;
+			cout << d << "원 인츨" << endl;
+
+		}
+	}
+
+
+const int viewmoney() const {
+		return money;
+	}
+
+private:
+	int money;
+
+};
+
+int main()
+{
+	account poi(100);
+	poi.deposit(100);
+	poi.draw(20);
+
+	cout << poi.viewmoney() << endl;
+}
+
+// 상수형 메소드 를 만들때 뒤에다가
+
+
+
+#include <iostream>
+using namespace std;
+
+class vector2
+{
+public:
+	vector2();
+
+	vector2(float x, float y);
+	float getx() const;
+	float gety() const;
+
+	static vector2 sum(vector2 a, vector2 b) {
+		return vector2(a.getx() + b.getx(), a.gety() + b.gety());
+	}
+
+	vector2 operator+(const vector2 rhs) const;
+	vector2 operator-(const vector2 rhs) const;
+	vector2 operator*(const float rhs) const;
+	vector2 operator*(const vector2 rhs) const;
+
+private:
+	float x;
+	float y;
+};
+
+
+int main()
+{
+	vector2 a(2, 3);
+	vector2 b(-1, 4);
+	vector2 c = vector2::sum(a, b);
+	vector2 c1 = a.operator+(b);
+	vector2 c2 = a + b;
+
+	cout << a.getx() << "," << a.gety() << endl;
+	cout << b.getx() << "," << b.gety() << endl;
+	cout << c.getx() << "," << c.gety() << endl;
+	cout << c.getx() << "," << c.gety() << endl;
+	cout << c1.getx() << "," << c1.gety() << endl;
+}
+
+vector2::vector2() :x(0), y(0) {}
+
+vector2::vector2(float x, float y) : x(x), y(y) {}
+float vector2::getx()const{return x;}
+float vector2::gety()const{return y;}
+
+vector2 vector2::operator+(const vector2 rhs) const {
+	return vector2(x + rhs.x, y + rhs.y);
+}
+
+vector2 vector2::operator-(const vector2 rhs) const {
+	return vector2(x - rhs.x, y - rhs.y);
+}
+
+vector2 vector2::operator*(const float rhs) const {
+	return vector2(x * rhs.x, y * rhs.y);
+}
+vector2 vector2::operator*(const vector2 rhs) const {
+	return vector2(x * rhs.x, y * rhs.y);
+}
+
+
+#include <iostream>
+
+using namespace std;
+
+class string
+{
+public:
+
+	string() {
+		strdata = NULL;
+		len = 0;
+
+	}
+
+	string(const char* str) {
+		len = strlen(str);
+		strdata = new char[len + 1];
+		strcpy(strdata, str);
+
+
+	}
+
+	~string()
+	{
+		delete[] strdata;
+	}
+
+	char* getstrdata()const {
+		return strdata;
+	}
+
+	int getlen() const {
+		return len;
+	}
+
+private:
+
+	char* strdata;
+	int len;
+};
+
+int main()
+{
+	string s1("안녕");
+	string s2(s1);
+
+	cout<< s1.get
+
+
+}
+*/
+/*
+#include <iostream>
+#include <ctime>
+
+int main()
+{
+	using namespace std;
+
+	cout << "지연시간";
+	float secs;
+	cin >> secs;
+	clock_t delay = secs * CLOCKS_PER_SEC;
+
+	cout << "카운트 시작\a\n";
+	clock_t start = clock();
+	while (clock() - start < delay);
+	cout << "종료\a\n";
+	return 0;
+
+}
+
+*/
+
+#include <iostream>
+
+using namespace std;
+
+long double proba(unsigned numbers, unsigned picks);
+
+int main()
+{
+	using namespace std;
+	double total, choices;
+	cout << "전체의 수의 개수와 뽑을 수의 개수를 입력하세요";
+	while ((cin >> total >> choices) && choices <= total)
+	{
+		cout << "당신의 이길 확률은";
+		cout << proba(total, choices);
+		cout << "번 중의 한번\n";
+		cout << "다시 두 수 입력  q는종료";
+
+
+	}
+	cout << "ㅍㄺㅁㅈㄹ\n";
+	return 0;
+}
+
+long double proba(unsigned numbers, unsigned picks) {
+
+	long double result = 1.0;
+	long double n;
+	unsigned p;
+
+	for (n = numbers, p = picks; p > 0; n--, p--)
+		result = result * n / p;
+
+	return result;
+
+}

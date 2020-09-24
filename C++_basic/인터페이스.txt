@@ -1,0 +1,128 @@
+#include <iostream>
+
+using namespace std;
+
+enum menu
+{
+	arcane_sword = 1,
+	absolut_sword,
+	fefnir_sword,
+	menu_exit
+};
+
+enum second_menu
+{
+	starforce = 1,
+	cube,
+	second_exit,
+};
+
+enum third_menu
+{
+	s_start=1,
+	s_cancel
+};
+
+int main()
+{
+	system("COLOR f0");
+
+	while (true)
+	{
+		system("cls");
+
+		cout << "메이플스토리 스타포스, 큐브 시뮬레이션을 실행합니다." << endl;
+		cout << "강화나 큐브를 사용할 무기를 선택해주세요." << endl;
+		cout << "1번.아케인 무기" << endl;
+		cout << "2번. 앱솔랩스 무기" << endl;
+		cout << "3번. 파프니르 무기" << endl;
+
+		cout << "4번. 프로그램 종료" << endl;
+		int M_menu;
+		cin >> M_menu;
+		
+		if (cin.fail())
+		{
+			cin.clear(); //만약 입력값이 문자열이면 에러발생할수있으니 비워줌.
+			cin.ignore(1024, '\n'); //입력버퍼에 \n이 남아있으니 무시해줌,넉넉히 1024바이트정도.
+			continue;
+		}
+
+		if (M_menu == menu_exit)
+			break;
+		
+		switch (M_menu)
+		{
+		case arcane_sword:
+			while (true)
+			{
+		
+				system("cls");
+				cout << "아케인 무기를 선택하셨습니다." << endl;
+				cout << "스타포스를 선택할껀지 큐브를 선택할껀지 입력하십시오." << endl;
+				cout << "1.스타포스" << endl;
+				cout << "2.큐브" << endl;
+				cout << "3.이전 페이지로 가기";
+				int second_menu;
+				cin >> second_menu;
+				if (second_menu == second_exit)
+					break;
+
+				switch (second_menu)
+				{
+				case starforce:
+					system("cls");
+					cout << "아케인 무기 스타포스를 실행합니다."<<endl;
+					cout << "강화시작:1번."<<endl;
+					cout << "나가기:2번."<<endl;
+					int third_menu;
+					cin >> third_menu;
+					if (third_menu == s_start)
+						cout << "여기가 강화 함수 선언";
+
+					else if (third_menu == s_cancel)
+				break;
+
+
+
+				case cube:
+					system("cls");
+					cout << "아케인 무기 큐브를 실행합니다."<<endl;
+					cout << "큐브시작:1번."<<endl;
+					cout << "나가기:2번."<<endl;
+					
+					cin >> third_menu;
+					if (third_menu == s_start)
+						cout << "큐브 함수 선언";
+
+					else if (third_menu == s_cancel)
+				break;
+
+				
+					
+				}
+			}
+				break;
+		case absolut_sword:
+			cout << "앱솔랩스 무기를 선택하셨습니다." << endl;
+			cout << "스타포스를 선택할껀지 큐브를 선택할껀지 입력하십시오." << endl;
+			cout << "1.스타포스" << endl;
+			cout << "2.큐브" << endl;
+			cout << "3.이전 페이지로 가기";
+			break;
+		case fefnir_sword: 
+			cout << "파프니르 무기를 선택하셨습니다." << endl;
+			cout << "스타포스를 선택할껀지 큐브를 선택할껀지 입력하십시오." << endl;
+			cout << "1.스타포스" << endl;
+			cout << "2.큐브" << endl;
+			cout << "3.이전 페이지로 가기";
+			break;
+		default:
+			cout << "잘못 입력됬습니다.";
+
+
+
+		
+		}
+	}
+}
